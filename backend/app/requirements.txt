@@ -1,0 +1,18 @@
+
+# Backend
+fastapi
+uvicorn[standard]
+
+# LangChain
+langchain
+langchain-core
+langchain-openai
+
+# Data validation
+pydantic
+
+# Environment variables
+python-dotenv
+
+# HTTP requests (optional, useful later)
+httpx
