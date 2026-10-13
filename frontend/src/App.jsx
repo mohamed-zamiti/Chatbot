@@ -22,6 +22,9 @@ function App() {
   const [isTyping, setIsTyping] = useState(false)
   const requestController = useRef(null)
 
+  // Identifies this conversation. The backend uses it to find the bot's memory.
+  const [sessionId, setSessionId] = useState(() => crypto.randomUUID())
+
   async function handleSend(text) {
     const question = text.trim()
     if (!question || isTyping) return
@@ -41,7 +44,7 @@ function App() {
         method: 'POST',
         signal: controller.signal,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, session_id: sessionId }),
       })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       const data = await response.json()
@@ -71,6 +74,8 @@ function App() {
     requestController.current?.abort()
     requestController.current = null
     setIsTyping(false)
+    // A new session id = a brand new conversation, the bot forgets the old one
+    setSessionId(crypto.randomUUID())
     setMessages([{
       id: crypto.randomUUID(),
       sender: 'bot',

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api", tags=["AI Assistant"])
 @router.post("/ask", response_model=ChatResponse)
 def ask_question(request: QuestionRequest):
     try:
-        answer = get_answer(request.question)
+        answer = get_answer(request.question, request.session_id)
     except LLMServiceError as error:
         # Configuration problem (missing .env values...)
         logger.error("LLM configuration error: %s", error)
